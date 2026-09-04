@@ -1,0 +1,67 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  createdAt DateTime @default(now())
+
+  watchlists Watchlist[]
+  stockStates UserStockState[]
+}
+
+model Watchlist {
+  id        String   @id @default(cuid())
+  name      String
+  createdAt DateTime @default(now())
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  items WatchlistItem[]
+
+  @@index([userId])
+}
+
+model WatchlistItem {
+  id         String   @id @default(cuid())
+  symbol     String
+  addedAt    DateTime @default(now())
+
+  watchlistId String
+  watchlist   Watchlist @relation(fields: [watchlistId], references: [id], onDelete: Cascade)
+
+  @@unique([watchlistId, symbol])
+  @@index([symbol])
+}
+
+model UserStockState {
+  id             String   @id @default(cuid())
+  userId         String
+  symbol         String
+  lastSeenPrice  Float
+  lastSeenVolume Float?
+  lastSeenAt     DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, symbol])
+  @@index([symbol])
+}
+
+model MarketSnapshot {
+  id        String   @id @default(cuid())
+  symbol    String
+  price     Float
+  volume    Float?
+  timestamp DateTime
+  source    String
+
+  @@index([symbol, timestamp])
+}
