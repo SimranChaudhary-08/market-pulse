@@ -439,6 +439,6 @@ These are intentionally not part of the current MVP to keep the system focused o
 
 - API keys are stored in environment variables.
 - Secrets are not exposed to the browser.
-- Watchlist operations verify ownership through the authenticated/demo user.
+- Watchlist operations are scoped to the current demo user.
 - Duplicate database records are prevented with unique constraints.
 - External market-data failures are handled without exposing internal errors to users.
