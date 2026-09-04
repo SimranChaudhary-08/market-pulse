@@ -8,7 +8,7 @@ Instead of requiring users to manually compare prices and activity, Market Pulse
 
 ## Product Pitch
 
-Market Pulse turns a passive stock watchlist into a changes-first market monitor. It remembers what each user last saw, compares new market data against that personal baseline, and highlights meaningful price or volume movements. Users can quickly see what changed, why it matters, and whether the data is fresh, cached, or being served from a fallback snapshot. The system prioritizes reliability by storing market snapshots and continuing to serve previously saved data when the external market-data provider is unavailable.
+Market Pulse turns a passive stock watchlist into a changes-first market monitor. It remembers what each user last saw, compares new market data against that personal baseline, and highlights meaningful price or volume movements. Users can quickly see what changed, why it matters, and whether the data is fresh, cached, or served from a fallback snapshot. The system prioritizes reliability by storing market snapshots and continuing to serve previously saved data when the external market-data provider is unavailable. Instead of predicting prices, Market Pulse focuses on helping users understand what deserves attention now, while making data freshness and limitations explicit.
 
 ## Key Features
 
@@ -47,7 +47,7 @@ Compare volume with recent history
 Classify meaningful change
         ↓
 Explain why the stock was highlighted
-````
+```
 
 The user's baseline is only updated when they explicitly click:
 
@@ -63,21 +63,21 @@ Market Pulse currently uses the following heuristic:
 
 A stock receives `High attention` when:
 
-* Absolute price movement is at least 5%
+- Absolute price movement is at least 5%
 
 OR
 
-* Price movement is at least 3% and unusual volume is detected
+- Price movement is at least 3% and unusual volume is detected
 
 ### Worth Watching
 
 A stock receives `Worth watching` when:
 
-* Absolute price movement is at least 2%
+- Absolute price movement is at least 2%
 
 OR
 
-* Unusual volume is detected
+- Unusual volume is detected
 
 ### Normal
 
@@ -147,9 +147,9 @@ A unique constraint prevents the same stock from being added twice to the same w
 
 Stores the user's personal last-seen baseline:
 
-* Last seen price
-* Last seen volume
-* Last seen timestamp
+- Last seen price
+- Last seen volume
+- Last seen timestamp
 
 This is the key entity for answering:
 
@@ -159,11 +159,11 @@ This is the key entity for answering:
 
 Stores historical market observations:
 
-* Symbol
-* Price
-* Volume
-* Timestamp
-* Data source
+- Symbol
+- Price
+- Volume
+- Timestamp
+- Data source
 
 These snapshots are used for historical volume analysis and resilience.
 
@@ -207,10 +207,10 @@ Market data is provided by BharatStock.
 
 The application currently uses:
 
-* NSE stock data
-* End-of-Day prices
-* Previous close
-* Trading volume
+- NSE stock data
+- End-of-Day prices
+- Previous close
+- Trading volume
 
 Because the provider supplies EOD data, the application explicitly displays the data freshness rather than presenting it as real-time market data.
 
@@ -218,25 +218,25 @@ Because the provider supplies EOD data, the application explicitly displays the 
 
 ### Frontend
 
-* Next.js
-* React
-* TypeScript
-* Tailwind CSS
+- Next.js
+- React
+- TypeScript
+- Tailwind CSS
 
 ### Backend
 
-* Next.js API Routes
-* TypeScript
+- Next.js API Routes
+- TypeScript
 
 ### Database
 
-* PostgreSQL
-* Prisma ORM
-* Neon PostgreSQL
+- PostgreSQL
+- Prisma ORM
+- Neon PostgreSQL
 
 ### External Data
 
-* BharatStock API
+- BharatStock API
 
 ## Project Structure
 
@@ -270,10 +270,12 @@ market-pulse/
 │       └── market/
 │           └── twelve-data.ts
 │
-├── .env
 ├── package.json
+├── package-lock.json
 └── README.md
 ```
+
+> Note: `twelve-data.ts` is the current filename of the market-data integration module. The implementation uses BharatStock as the external provider.
 
 ## Getting Started
 
@@ -407,10 +409,10 @@ This makes freshness visible and avoids misleading users.
 
 Snapshots provide:
 
-* Historical context
-* Volume analysis
-* Debugging visibility
-* A fallback when the external provider is unavailable
+- Historical context
+- Volume analysis
+- Debugging visibility
+- A fallback when the external provider is unavailable
 
 ### Why not microservices?
 
@@ -422,22 +424,21 @@ Clear service boundaries inside one Next.js application provide most of the arch
 
 Possible future improvements include:
 
-* Real-time or delayed intraday market data
-* Multiple watchlists per user
-* Authentication
-* Market-relative movement detection
-* More sophisticated volume baselines
-* Snapshot retention and aggregation
-* Background market-data ingestion
-* Automated alerts
+- Real-time or delayed intraday market data
+- Multiple watchlists per user
+- Authentication
+- Market-relative movement detection
+- More sophisticated volume baselines
+- Snapshot retention and aggregation
+- Background market-data ingestion
+- Automated alerts
 
 These are intentionally not part of the current MVP to keep the system focused on the core problem.
 
 ## Security
 
-* API keys are stored in environment variables.
-* Secrets are not exposed to the browser.
-* Watchlist operations verify ownership through the authenticated/demo user.
-* Duplicate database records are prevented with unique constraints.
-* External market-data failures are handled without exposing internal errors to users.
-
+- API keys are stored in environment variables.
+- Secrets are not exposed to the browser.
+- Watchlist operations verify ownership through the authenticated/demo user.
+- Duplicate database records are prevented with unique constraints.
+- External market-data failures are handled without exposing internal errors to users.
